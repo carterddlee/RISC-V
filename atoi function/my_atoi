@@ -17,7 +17,7 @@ lbu t0, 0(a0) # t0= *s
 addi t1, x0, 0  # t1 = negate
 addi t5, x0, 0  # t5 = result
 
-bnez t0, ret_zero # checking if char is null
+beqz a0, ret_zero # checking if char is null
 
 addi t2, x0, 45
 beq t0, t2, neg_sign #checking if char is negative sign
@@ -49,7 +49,7 @@ slli t6, t5, 3 # t5 * 8
 
 add t5, t2, t6 # result = (result << 3) + (result << 1);
 
-sub a1, t0, 48 # a1 = *s - '0'
+addi a1, t0, -48 # a1 = *s - '0'
 
 add t5, t5, a1 # t5= t5 + (*s - '0')
 
@@ -57,7 +57,7 @@ addi a0, a0, 1
 j loop
 
 negation:
-bqez t1, done
+beqz t1, done
 xori t5, t5, -1    # t5 = ~t5 (bitwise NOT)
 addi t5, t5, 1     # t2 = t2 + 1
 j done
@@ -76,4 +76,5 @@ addi a0, x0, 0
 ret
 
 done:
+mv a0, t5
 ret
