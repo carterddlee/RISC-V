@@ -14,10 +14,10 @@ my_atoi:
 
 lbu t0, 0(a0) # t0= *s
 
-addi t1, x0, 0;  # t1 = negate
-addi t5, x0, 0;  # t5 = result
+addi t1, x0, 0  # t1 = negate
+addi t5, x0, 0  # t5 = result
 
-bnez rs, ret_zero # checking if char is null
+bnez t0, ret_zero # checking if char is null
 
 addi t2, x0, 45
 beq t0, t2, neg_sign #checking if char is negative sign
@@ -39,15 +39,28 @@ addi t3, x0, 48 # t3 = '0'
 addi t4, x0, 57 # t4 = '9'
 
 
-blt a0, t3, negation # if a0 < '0'
+blt t0, t3, negation # if a0 < '0'
 
-blt t4, a0, negation # if '9' < a0
+blt t4, t0, negation # if '9' < a0
 
+slli t2, t5, 1 # t5 * 2
+
+slli t6, t5, 3 # t5 * 8 
+
+add t5, t2, t6 # result = (result << 3) + (result << 1);
+
+sub a1, t0, 48 # a1 = *s - '0'
+
+add t5, t5, a1 # t5= t5 + (*s - '0')
+
+addi a0, a0, 1
+j loop
 
 negation:
-
-
-
+bqez t1, done
+xori t5, t5, -1    # t5 = ~t5 (bitwise NOT)
+addi t5, t5, 1     # t2 = t2 + 1
+j done
 
 pos_sign:
 addi a0, a0, 1
@@ -60,4 +73,7 @@ j loop
 
 ret_zero:
 addi a0, x0, 0
+ret
+
+done:
 ret
