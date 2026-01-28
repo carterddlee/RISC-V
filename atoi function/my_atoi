@@ -12,12 +12,13 @@
 
 my_atoi:
 
+beqz a0, ret_zero # checking if char is null
+
 lbu t0, 0(a0) # t0= *s
 
 addi t1, x0, 0  # t1 = negate
 addi t5, x0, 0  # t5 = result
 
-beqz a0, ret_zero # checking if char is null
 
 addi t2, x0, 45
 beq t0, t2, neg_sign #checking if char is negative sign
